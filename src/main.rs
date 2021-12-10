@@ -6,10 +6,10 @@ fn main() {
     let value = arguments.next().unwrap();
 
     println! ("Key {} and Value {}", key, value);
-    let contents = format!("{}\t{}\n", key, value);
-    let write_result = std::fs::write("kv.db", contents).unwrap();
-
-    let database = Database::new().expect("Database::new() crashed");
+    let mut database = Database::new().expect("Database::new() crashed");
+    // Can also use Database::insert(database, key, value)
+    database.insert(&key, &value);
+    database.insert(&key.to_uppercase(), &value);
 }
 
 struct Database {
@@ -42,5 +42,9 @@ impl Database {
             testing: "ola".to_owned(),
             testing2:"ola".to_string()
         })
+    }
+
+    fn insert(&mut self, key: &str, value: &str) {
+        self.map.insert(key.to_owned(), value.to_owned()); // This insert function is defined on std HashMap library
     }
 }
